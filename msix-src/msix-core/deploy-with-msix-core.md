@@ -14,12 +14,12 @@ ms.custom: "RS5, seodec18"
 
 ## MSI installation
 
-We recommend using our provided MSI installers to install MSIX Core because they automatically add msixmgr.exe to your search path and associate the MSIX extension with the installer.
+We recommend using our provided MSI installers to install MSIX Core because they automatically add msixmgr.exe to your search path and associate the MSIX extension with the installer. MSIX Core will install to the systems Program Files container within the *msixmgr* folder (`C:\Program Files\msixmgr`).
 
 You can download the following architecture-specific MSI installers from the **Assets** section on our [release page](https://github.com/microsoft/msix-packaging/releases):
 
 * **msixmgrSetup-x64.msi**
-* **msixmgrSetup-86.msi**
+* **msixmgrSetup-x86.msi**
 
 > [!NOTE]
 > Make sure you choose the correct installer for your device's architecture. This will impact where the installer will store important files. The name of the file may change based on the version of the installer.
