@@ -1,16 +1,23 @@
 ---
-description: This article describes how to test your Windows app to ensure that it will operate correctly on devices that run Windows 10 in S mode.
-title: Test your Windows app for Windows 10 S
-ms.date: 07/29/2019
+description: Learn how to test a Windows application on Windows 10 in S mode.
+title: Test your Windows application for Windows 10 S
+ms.date: 08/25/2026
 ms.topic: article
 keywords: windows 10 S, uwp, msix
 ---
 
-# Test your Windows app for Windows 10 in S mode
+# Test your Windows application for Windows 10 in S mode
 
-You can test your Windows app to ensure that it will operate correctly on devices that run Windows 10 in S mode. In fact, if you plan to publish your app to the Microsoft Store, you must do this because it is a store requirement. To test your app, you can apply a Windows Defender Application Control (WDAC) policy on a device that is running Windows 10 Pro.
+You can test your Windows application to ensure that it operates correctly on devices that run
+Windows 10 in S mode. If you plan to publish your application to the Microsoft Store, you must
+do this because it's a Microsoft Store requirement. To test your application, you can apply an
+App Control for Business (formerly Windows Defender Application Control, WDAC) policy on a
+device that is running Windows 10 Pro.
 
-The WDAC policy enforces the rules that apps must conform to in order to run on Windows 10 S.
+The App Control for Business policy enforces the rules that applications must conform to in order
+to run on Windows 10 in S mode. IT Pros can also use App Control for Business more broadly to
+control MSIX packages on managed Windows devices beyond S mode. For more information, see
+[Use App Control for Business with MSIX packages](../package/signing-package-overview.md#use-app-control-for-business-with-msix-packages).
 
 > [!IMPORTANT]
 >We recommend that you apply these policies to a virtual machine, but if you want to apply them to your local machine, make sure to review our best practice guidance in the "Next, install the policy and restart your system" section of this topic before you apply a policy.
@@ -19,7 +26,7 @@ The WDAC policy enforces the rules that apps must conform to in order to run on 
 
 ## First, download the policies and then choose one
 
-Download the WDAC policies [here](https://go.microsoft.com/fwlink/?linkid=849018).
+Download the App Control for Business policies [here](https://go.microsoft.com/fwlink/?linkid=849018).
 
 Then, choose the one that makes the most sense to you. Here's summary of each policy.
 

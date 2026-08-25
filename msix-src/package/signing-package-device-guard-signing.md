@@ -1,7 +1,7 @@
 ---
-description: This article describes how to sign an MSIX package with Device Guard signing, which enables enterprises to guarantee that apps come from a trusted source.
+description: Learn how to sign an MSIX package with Device Guard signing.
 title: Sign an MSIX package with Device Guard signing
-ms.date: 04/15/2026
+ms.date: 08/25/2026
 ms.topic: how-to
 keywords: windows 10, windows 11, uwp, msix
 ms.custom: sfi-ga-nochange
@@ -12,11 +12,23 @@ ms.custom: sfi-ga-nochange
 > [!IMPORTANT]
 > **Device Guard Signing Service v2 (DGSS) is no longer available.** Microsoft Store for Business and Microsoft Store for Education — which DGSS required for authentication and permissions — were retired on March 31, 2023.
 >
-> For enterprise code signing, use [Azure Trusted Signing](/azure/trusted-signing/), which is the successor service. Azure Trusted Signing provides managed certificate lifecycle, integrates with SignTool and CI/CD pipelines, and supports MSIX, catalog file, and WDAC policy signing. See [Sign an MSIX package: end-to-end guide](sign-msix-package-guide.md) for current guidance.
+> For enterprise code signing, use [Azure Artifact Signing](/azure/trusted-signing/), which is the
+> successor service. Azure Artifact Signing provides managed certificate lifecycle, integrates with
+> SignTool and CI/CD pipelines, and supports MSIX, catalog file, and App Control for Business policy
+> signing. See [Sign an MSIX package: end-to-end guide](sign-msix-package-guide.md) for current
+> guidance.
 
 The content below is retained for historical reference only.
 
-The [Device Guard Signing Service v2 (DGSS)](/windows/security/threat-protection/windows-defender-application-control/use-device-guard-signing-portal-in-microsoft-store-for-business) is a code signing service that comes with your existing Microsoft Store for Business and Education tenant account. You can use the DGSS to sign line-of-business apps, catalog files, and Windows Defender Application Control (WDAC) policies. It enables enterprises to guarantee that every app comes from a trusted source. You can use SignTool in the Windows SDK and the DGSSv2 dlib in the NuGet package to sign your MSIX apps with Device Guard signing. This feature support enables you to easily incorporate Device Guard signing into the MSIX package building and signing workflow.
+The [Device Guard Signing Service v2 (DGSS)][dgss] is a code signing service that comes with
+your existing Microsoft Store for Business and Education tenant account. You can use the DGSS to
+sign line-of-business apps, catalog files, and App Control for Business (formerly Windows Defender
+Application Control, WDAC) policies. It enables enterprises to guarantee that every app comes from
+a trusted source. You can use SignTool in the Windows SDK and the DGSSv2 dlib in the NuGet package
+to sign your MSIX packages with Device Guard signing. This feature support enables you to easily
+incorporate Device Guard signing into the MSIX package building and signing workflow.
+
+[dgss]: /windows/security/threat-protection/windows-defender-application-control/use-device-guard-signing-portal-in-microsoft-store-for-business
 
 A [NuGet package](https://www.nuget.org/packages/Microsoft.Acs.Dgss.Client) containing the required DGSS v2 components and migration documentation is available. Please read the Microsoft Terms of Use included in the NuGet package; note that the usage of DGSS implies acceptance of these terms. For any questions, please contact us at DGSSMigration@microsoft.com.
 
@@ -149,7 +161,10 @@ Get-RootCertificate
 Install the root certificate to the **Trusted Root Certification Authorities** on your device. Install your newly signed app to verify that you have successfully signed your app with Device Guard signing. 
 
 > [!IMPORTANT]
-> In order to achieve isolation, deploy the WDAC CI policy to trust apps that are signed with DGSSv2. Be sure to read through the readme_cmdlets documentation and migration from DGSSv1 to DGSSv2 documentation that is included in the NuGet Package. 
+> In order to achieve isolation, deploy the App Control for Business code integrity (CI) policy
+> to trust apps that are signed with DGSSv2. Be sure to read through the readme_cmdlets
+> documentation and migration from DGSSv1 to DGSSv2 documentation that is included in the NuGet
+> Package.
 
 ## Common errors
 

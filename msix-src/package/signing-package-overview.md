@@ -1,7 +1,7 @@
 ---
-description: Learn how to sign an MSIX app package for deployment on Windows, including signing options for development, testing, and production.
+description: Learn how to sign an MSIX package for deployment on Windows.
 title: Sign an MSIX package
-ms.date: 04/14/2026
+ms.date: 08/25/2026
 ms.topic: article
 keywords: windows, msix, signing, certificate, artifact signing, trusted signing, signtool, winapp cli
 ---
@@ -62,6 +62,52 @@ The [WinApp CLI](/windows/apps/dev-tools/winapp-cli) provides convenient command
 |[Sign an MSIX package with Device Guard signing](./signing-package-device-guard-signing.md)| How to sign your app with Device Guard signing.|
 |[Creating unsigned packages for testing](./unsigned-package.md)| How to create an unsigned MSIX package for testing.|
 |[Azure Artifact Signing](/azure/trusted-signing/)| Microsoft's managed signing service (formerly Trusted Signing) for production MSIX packages.|
+
+## Use App Control for Business with MSIX packages
+
+App Control for Business (formerly Windows Defender Application Control, WDAC) is a Windows
+security feature that helps IT Pros control which drivers and applications can run on managed
+devices. It isn't limited to Windows 10 in S mode. App Control for Business is available on
+Windows 10, Windows 11, and Windows Server 2016 or later, with some capabilities depending on
+Windows version and edition. For details, see [App Control for Business and AppLocker feature
+availability](/windows/security/application-security/application-control/app-control-for-business/feature-availability).
+
+App Control for Business doesn't replace MSIX package signing. Windows still requires an MSIX
+package to be signed with a valid code signing certificate, and the certificate must be trusted
+on the device for installation. App Control policies are an additional enterprise control that
+can allow, audit, or block what runs after deployment.
+
+For packaged apps, including MSIX packages, App Control for Business can use rules based on the
+package signature or Package Family Name (PFN). Because the files in an MSIX package share an
+identity and common signature, App Control for Business can control the packaged app with a
+single rule. Choose a signer-rule or PFN-rule model for packaged apps; the App Control for
+Business guidance describes constraints on mixing those rule types. For the canonical guidance,
+see [Manage Packaged Apps with App Control for
+Business](/windows/security/application-security/application-control/app-control-for-business/design/manage-packaged-apps-with-appcontrol).
+
+Use the following matrix to plan your policy approach.
+
+| Scenario | App Control for Business consideration |
+|---|---|
+| Windows 10/11 Pro or Enterprise clients | App Control for Business can be used beyond S mode. Check feature availability before choosing policy features. |
+| Windows Server | App Control for Business is available on Windows Server 2016 or later; some capabilities require later Server versions. |
+| Signed MSIX packages | Prefer signer-based or PFN rules for packaged apps, based on your organization's policy design. |
+| Unsigned or test-signed packages | Treat as development-only unless your policy deliberately trusts the signer or package identity. |
+| Audit mode | Start here to collect Code Integrity events without blocking users. |
+| Enforcement mode | Use after validating audit events; misconfigured policies can block required apps or system components. |
+| Base and supplemental policies | Use base policies for the core trust model and supplemental policies to extend allowed packages where supported. |
+| Per-package allowance | Use packaged app rules to allow a specific MSIX packaged app; don't confuse this with full policy design. |
+
+For deployment guidance, start with [Use audit events to create App Control policy
+rules](/windows/security/application-security/application-control/app-control-for-business/deployment/audit-appcontrol-policies),
+[Enforce App Control for Business policies](/windows/security/application-security/application-control/app-control-for-business/deployment/enforce-appcontrol-policies),
+and [Use multiple App Control for Business
+Policies](/windows/security/application-security/application-control/app-control-for-business/design/deploy-multiple-appcontrol-policies).
+
+> [!IMPORTANT]
+> Test App Control for Business policies in audit mode and in a staged deployment ring before
+> enforcement. A policy that is too restrictive can prevent required applications, scripts,
+> drivers, or boot-critical components from running.
 
 ## Timestamping
 
