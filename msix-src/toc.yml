@@ -132,6 +132,8 @@
           href: packaging-tool/duplicate-tool-settings-across-devices.md
         - name: Generate a conversion template file
           href: packaging-tool/generate-template-file.md
+        - name: Package manifest schema support in the MSIX Packaging Tool
+          href: packaging-tool/supported-schema-elements.md
         - name: MSIX Packaging Tool Insider Program
           href: packaging-tool/insider-program.md
         - name: Release notes for the MSIX Packaging Tool
