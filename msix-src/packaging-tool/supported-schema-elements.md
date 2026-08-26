@@ -21,14 +21,6 @@ element depends on the package manifest schema and the Windows version that depl
 package. For schema details and version applicability, use the
 [package manifest schema reference](/uwp/schemas/appxpackage/uapmanifestschema/schema-root?context=/windows/msix/render).
 
-<!--
-SME question for ADO bug 31356148: Please confirm whether the MSIX Packaging Tool team
-has a versioned, Microsoft-published list of package manifest schema elements that the
-MSIX Packaging Tool GUI and CLI can author or edit. If such a list exists, confirm the
-MSIX Packaging Tool version, Windows version, and whether each item applies to the GUI,
-CLI, Package Editor direct-manifest editing, or all surfaces.
--->
-
 ## Understand the responsibility boundary
 
 - **Windows deployment platform**: Processes the package manifest for deployment
