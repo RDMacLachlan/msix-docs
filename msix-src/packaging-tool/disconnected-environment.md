@@ -1,7 +1,7 @@
 ---
 title: Using the MSIX Packaging Tool in a disconnected environment
 description: This article describes how to acquire all of the assets required for the MSIX Packaging Tool if you are in a disconnected environment.
-ms.date: 10/03/2023
+ms.date: 08/26/2026
 ms.topic: concept-article
 keywords: msix
 ---
@@ -28,21 +28,32 @@ After you have the offline version of the tool, you can use [PowerShell](/powers
 PS C:\> Add-AppxProvisionedPackage -Path C:\offline -PackagePath C:\MSIX\MyPackage.msix -LicensePath C:\MSIX\MyLicense.xml
 ```
 
-The MSIX Packaging Tool driver is delivered as a [Feature on Demand (FOD)](/windows-hardware/manufacture/desktop/features-on-demand-v2--capabilities) package from Windows Update, and it will fail to install if the Windows Update service is disabled on the machine, or if Windows Insider flight ring settings don't match the operating system (OS) build number of the computer.
+The MSIX Packaging Tool driver is delivered as the `Msix.PackagingTool.Driver~~~~0.0.1.0` [Feature on Demand (FOD)](/windows-hardware/manufacture/desktop/features-on-demand-v2--capabilities). On a connected device, Windows can acquire the capability from Windows Update:
 
-If you're in an enterprise environment with Windows Server Update Services (WSUS) or Systems Center (now Microsoft Endpoint Manager), then you might need to modify your default configuration (see [How to make Features on Demand and language packs available when you're using WSUS or Configuration Manager](/windows/deployment/update/fod-and-lang-packs)). Or just download and install the FOD manually:
+```cmd
+DISM /Online /Add-Capability /CapabilityName:Msix.PackagingTool.Driver~~~~0.0.1.0
+```
 
-- Download the FOD .cab file for [Windows 10, version 1809, x64](https://download.microsoft.com/download/8/4/3/8436215A-42DB-4FD2-966D-60D436D6EEFC/Msix-PackagingTool-Driver-Package~31bf3856ad364e35~amd64~~.cab) or [Windows 10, version 1809, x86](https://download.microsoft.com/download/9/9/4/9948d09d-af25-45a5-b01f-cc4bcf05f5bf/Msix-PackagingTool-Driver-Package~31bf3856ad364e35~x86~~.cab)
-- Download the FOD .cab file for [Windows 10, version 1903, x64](https://download.microsoft.com/download/5/2/e/52ec35e9-3b50-47b2-879d-c815a93bc3fc/Msix-PackagingTool-Driver-Package~31bf3856ad364e35~amd64~~.cab) or [Windows 10, version 1903, x86](https://download.microsoft.com/download/2/c/3/2c3a78a2-4d64-426a-976d-dfe4805110cc/Msix-PackagingTool-Driver-Package~31bf3856ad364e35~x86~~.cab) **NOTE: This will also work for Windows 10, version 1909**
-- Download the FOD .cab file for [Windows 10, version 2004, x64](https://download.microsoft.com/download/4/c/7/4c79bf31-946c-444a-bc5f-61398d3b0a76/Msix-PackagingTool-Driver-Package~31bf3856ad364e35~amd64~~.cab) **NOTE: This will also work for later Windows 10 versions**
-- Download the FOD .cab file for [Windows 11, version 21H2, x64](https://download.microsoft.com/download/6/c/7/6c7d654b-580b-40d4-8502-f8d435ca125a/Msix-PackagingTool-Driver-Package~31bf3856ad364e35~amd64~~.cab) **NOTE: This will also work for Windows 11, version 22H2 and later**
-- Individually-obtained Feature on Demand (FOD) packages can be installed using [DISM command-line options](/windows-hardware/manufacture/desktop/dism-operating-system-package-servicing-command-line-options). In an elevated PowerShell window type: ```Dism /Online /add-package /packagepath:(path)``` **NOTE: Please ensure that the file path contains the right file name with the '.cab' extension.**
+If Windows Update is disabled or controlled by Windows Server Update Services (WSUS) or Configuration Manager, review [how FOD source policy differs by Windows version](/windows/deployment/update/fod-and-lang-packs). Windows 11, version 22H2 and later can receive FOD content through on-premises Unified Update Platform (UUP). Earlier supported configurations might require Windows Update or an alternate source.
 
-IT admins can also create [Side by side feature store (shared folder)](/windows-server/administration/server-manager/configure-features-on-demand-in-windows-server) to allow access to the MSIX Packaging tool driver FOD. You can find additional details at the bottom of the blog post [Language pack acquisition and retention for enterprise devices](https://techcommunity.microsoft.com/t5/Windows-IT-Pro-Blog/Language-pack-acquisition-and-retention-for-enterprise-devices/ba-p/275404).
+### Install the driver from offline media
 
-Otherwise, if you have access to enterprise or OEM channels, then you can obtain the driver from Windows 10 Features on Demand media from one of the following sources:
+FOD packages are serviced components and must match the Windows release and architecture on the conversion device. Don't use the Windows 11, version 21H2 driver CAB with later Windows 11 releases. Instead, use the media that corresponds to the installed Windows release:
 
-- [Volume Licensing Service Center (VLSC)](https://www.microsoft.com/Licensing/servicecenter/default.aspx): Volume License access is required.
-- [OEM Portal](https://www.microsoftoem.com): OEM access is required.
-- [MSDN Download](https://my.visualstudio.com/Downloads/Featured): MSDN subscription is required.
+| Conversion device | Offline source |
+| --- | --- |
+| Windows 11 | Matching Windows 11 Languages and Optional Features ISO |
+| Windows 10, version 2004 and later | Windows 10, version 2004 Features on Demand ISO |
 
+The [Features on Demand media table](/windows-hardware/manufacture/desktop/features-on-demand-v2--capabilities#features-on-demand-media) lists the correct media for other Windows releases. Acquire the ISO through a channel available to your organization:
+
+- Volume licensing customers can [download volume licensing products](/microsoft-365/commerce/licenses/download-vl-products) from the Microsoft 365 admin center.
+- OEMs and system builders can obtain the Languages and Optional Features ISO from the [Microsoft OEM site](https://go.microsoft.com/fwlink/?LinkId=131359) or [Device Partner Center](https://devicepartner.microsoft.com/).
+
+Mount the matching ISO and use it directly as the FOD repository. In an elevated Command Prompt, replace `<source>` with the mounted drive or repository path:
+
+```cmd
+DISM /Online /Add-Capability /CapabilityName:Msix.PackagingTool.Driver~~~~0.0.1.0 /Source:<source> /LimitAccess
+```
+
+`/LimitAccess` prevents DISM from contacting Windows Update or WSUS. If you build a reduced repository instead of using the mounted ISO, follow the [FOD repository guidance](/windows-hardware/manufacture/desktop/features-on-demand-v2--capabilities#fod-repositories); don't copy an individual CAB without its required repository metadata.
